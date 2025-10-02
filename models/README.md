@@ -2,11 +2,26 @@
 
 Ce dossier contient les modèles d'intelligence artificielle utilisés par DIANA.
 
+## ⚠️ IMPORTANT - Modèle Non Inclus
+
+**Le fichier `breast_cancer_model.onnx.enc` (133 MB) n'est PAS inclus dans ce dépôt GitHub.**
+
+### 📥 Comment obtenir le modèle ?
+
+**Option 1 - Télécharger le modèle pré-entraîné :**
+```bash
+# Téléchargez depuis : [Lien Google Drive / Dropbox à ajouter]
+# Placez le fichier ici : models/breast_cancer_model.onnx.enc
+```
+
+**Option 2 - Créer votre propre modèle :**
+Suivez les instructions ci-dessous pour entraîner et chiffrer votre modèle.
+
 ## 📁 Structure
 
 ```
 models/
-├── breast_cancer_model.onnx.enc  # Modèle chiffré (production)
+├── breast_cancer_model.onnx.enc  # Modèle chiffré (NON inclus - 133 MB)
 ├── breast_cancer_model.onnx      # Modèle déchiffré (ne pas commiter!)
 └── README.md                      # Ce fichier
 ```
