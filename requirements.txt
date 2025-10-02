@@ -1,0 +1,32 @@
+# DIANA - Diagnostic Intelligent Automatisé pour les Nouvelles Analyses
+# Requirements pour l'application
+
+# Interface graphique
+PyQt6==6.7.0
+PyQt6-Qt6==6.7.0
+
+# Traitement d'images et IA
+onnxruntime==1.17.1
+onnxruntime-gpu==1.17.1  # Optionnel : pour GPU
+numpy==1.26.4
+Pillow==10.3.0
+opencv-python==4.9.0.80
+
+# Authentification et base de données
+supabase==2.4.2
+python-dotenv==1.0.1
+
+# Cryptographie
+cryptography==42.0.5
+
+# Réseau et mises à jour
+requests==2.31.0
+urllib3==2.2.1
+
+# Utilitaires
+tqdm==4.66.2
+psutil==5.9.8
+
+# Build et packaging
+pyinstaller==6.5.0
+

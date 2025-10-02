@@ -1,0 +1,11 @@
+# DIANA - Dépendances pour la version Web
+# Inclut toutes les dépendances de base + serveur web
+
+# Dépendances de base
+-r requirements.txt
+
+# Serveur Web
+fastapi==0.109.2
+uvicorn[standard]==0.27.1
+python-multipart==0.0.9
+
