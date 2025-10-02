@@ -11,7 +11,13 @@ Ce dossier contient les modèles d'intelligence artificielle utilisés par DIANA
 **Option 1 - Télécharger le modèle pré-entraîné :**
 ```bash
 # Téléchargez depuis : [Lien Google Drive / Dropbox à ajouter]
-# Placez le fichier ici : models/breast_cancer_model.onnx.enc
+
+# Placez le fichier dans le dossier models/
+# Windows:
+copy breast_cancer_model.onnx.enc models\
+
+# Linux/Mac:
+cp breast_cancer_model.onnx.enc models/
 ```
 
 **Option 2 - Créer votre propre modèle :**
