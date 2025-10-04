@@ -459,17 +459,6 @@ function initHomeButton() {
     }
 }
 
-function resetApplication() {
-    // Réinitialiser les notifications
-    const notifications = document.querySelectorAll('.notification');
-    notifications.forEach(notification => notification.remove());
-
-    // Forcer le rechargement complet de la page d'accueil
-    if (window.dianaApp) {
-        window.dianaApp.render();
-        window.dianaApp.initHomePage();
-    }
-}
 
 // ========== INIT APP ==========
 
@@ -479,7 +468,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initMenu();
     initHomeButton();
 
-    // Exporter les fonctions globales
-    window.resetApplication = resetApplication;
 });
 
