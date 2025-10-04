@@ -98,7 +98,8 @@ class DianaApp {
     updateHeader() {
         const user = AppState.getUser();
         const loginBtn = document.getElementById('loginBtn');
-        const signupBtn = document.getElementById('signupBtn');
+        const signupLink = document.getElementById('signupLink');
+        const logoutLink = document.getElementById('logoutLink');
 
         if (user) {
             // Utilisateur connecté
@@ -106,22 +107,16 @@ class DianaApp {
                 loginBtn.textContent = `👤 ${user.name || user.email}`;
                 loginBtn.onclick = () => AppState.navigateTo('profile');
             }
-            if (signupBtn) {
-                signupBtn.textContent = '🚪 Déconnexion';
-                signupBtn.onclick = confirmLogout;
-                signupBtn.className = 'btn-header btn-danger';
-            }
+            if (signupLink) signupLink.style.display = 'none';
+            if (logoutLink) logoutLink.style.display = 'block';
         } else {
             // Utilisateur non connecté
             if (loginBtn) {
                 loginBtn.textContent = '🔐 Connexion';
                 loginBtn.onclick = () => AppState.navigateTo('login');
             }
-            if (signupBtn) {
-                signupBtn.textContent = '✨ S\'inscrire';
-                signupBtn.onclick = () => AppState.navigateTo('signup');
-                signupBtn.className = 'btn-header btn-header-primary';
-            }
+            if (signupLink) signupLink.style.display = 'block';
+            if (logoutLink) logoutLink.style.display = 'none';
         }
     }
 
@@ -132,11 +127,12 @@ class DianaApp {
         const preview = document.getElementById('preview');
         const analyzeBtn = document.getElementById('analyzeBtn');
         const browseBtn = document.getElementById('browseBtn');
+        const resetBtn = document.getElementById('resetBtn');
         const uploadZone = document.getElementById('uploadZone');
         const uploadText = document.getElementById('uploadText');
         const resultPanel = document.getElementById('resultPanel');
 
-        if (!fileInput || !browseBtn || !uploadZone || !analyzeBtn) {
+        if (!fileInput || !browseBtn || !uploadZone || !analyzeBtn || !resetBtn) {
             console.error('❌ Éléments manquants');
             return;
         }
@@ -263,8 +259,15 @@ class DianaApp {
                     // Recharger les statistiques après l'analyse
                     this.loadStats();
                 } else {
-                    const error = await response.json();
-                    let errorMessage = error.detail || 'Erreur lors de analyse';
+                    let errorMessage = 'Erreur lors de l\'analyse';
+
+                    try {
+                        const error = await response.json();
+                        errorMessage = error.detail || error.message || 'Erreur lors de l\'analyse';
+                    } catch (e) {
+                        // Si la réponse n'est pas du JSON, utiliser le texte brut
+                        errorMessage = await response.text() || 'Erreur lors de l\'analyse';
+                    }
 
                     if (response.status === 413) {
                         errorMessage = 'Fichier trop volumineux. Maximum: 50 MB';
@@ -283,6 +286,54 @@ class DianaApp {
                 analyzeBtn.disabled = false;
                 analyzeBtn.innerHTML = '🔬 ANALYSER';
             }
+        });
+
+        // Bouton RÉINITIALISER
+        resetBtn.addEventListener('click', () => {
+            // Réinitialiser le champ de fichier
+            fileInput.value = '';
+
+            // Réinitialiser l'aperçu d'image
+            if (preview) {
+                preview.style.display = 'none';
+                preview.src = '';
+            }
+
+            // Réinitialiser la zone d'upload
+            if (uploadZone) {
+                uploadZone.style.border = '3px dashed rgba(102, 126, 234, 0.4)';
+                uploadZone.style.background = 'var(--bg-tertiary)';
+            }
+
+            // Réinitialiser le texte d'upload
+            if (uploadText) {
+                uploadText.style.display = 'block';
+                uploadText.innerHTML = `
+                    <p style="font-size: 3em; margin-bottom: 16px;">📁</p>
+                    <p style="font-size: 1.3em; margin-bottom: 8px; font-weight: 600;">Cliquez ou glissez une image</p>
+                    <p style="color: rgba(255,255,255,0.6);">JPG, PNG, BMP, TIFF, WEBP acceptés</p>
+                    <p style="color: rgba(255,255,255,0.4); margin-top: 8px; font-size: 0.9em;">Taille maximale: 50 MB</p>
+                `;
+            }
+
+            // Réinitialiser le bouton d'analyse
+            analyzeBtn.disabled = true;
+            analyzeBtn.innerHTML = '🔬 ANALYSER';
+
+            // Réinitialiser le panneau de résultats
+            if (resultPanel) {
+                resultPanel.innerHTML = `
+                    <div class="result-content">
+                        <p style="font-size: 1.2em; color: rgba(255,255,255,0.5);">
+                            En attente d'analyse...<br><br>
+                            Sélectionnez une image et cliquez sur ANALYSER
+                        </p>
+                    </div>
+                `;
+            }
+
+            // Notification de réinitialisation
+            showNotification('🔄 Interface réinitialisée', 'info');
         });
     }
 
@@ -359,18 +410,64 @@ class DianaApp {
 function initMenu() {
     const menuBtn = document.getElementById('menuBtn');
     const menu = document.getElementById('mainMenu');
+    const header = document.getElementById('mainHeader');
 
-    if (menuBtn && menu) {
-        menuBtn.addEventListener('click', () => {
-            menu.classList.toggle('show');
+    if (menuBtn && menu && header) {
+        menuBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const isOpen = menu.classList.contains('show');
+
+            if (isOpen) {
+                // Fermer le menu
+                menu.classList.remove('show');
+                header.classList.remove('header-compact');
+            } else {
+                // Ouvrir le menu
+                menu.classList.add('show');
+                header.classList.add('header-compact');
+            }
         });
 
         // Fermer le menu au clic en dehors
         document.addEventListener('click', (e) => {
             if (!menu.contains(e.target) && !menuBtn.contains(e.target)) {
                 menu.classList.remove('show');
+                header.classList.remove('header-compact');
             }
         });
+    }
+}
+
+// ========== BOUTON ACCUEIL ==========
+
+function initHomeButton() {
+    const homeBtn = document.getElementById('homeBtn');
+    if (homeBtn) {
+        homeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Fermer le menu si ouvert
+            const menu = document.getElementById('mainMenu');
+            const header = document.getElementById('mainHeader');
+            if (menu && header) {
+                menu.classList.remove('show');
+                header.classList.remove('header-compact');
+            }
+
+            // Forcer la navigation vers l'accueil avec replace
+            window.location.replace(window.location.origin + window.location.pathname);
+        });
+    }
+}
+
+function resetApplication() {
+    // Réinitialiser les notifications
+    const notifications = document.querySelectorAll('.notification');
+    notifications.forEach(notification => notification.remove());
+
+    // Forcer le rechargement complet de la page d'accueil
+    if (window.dianaApp) {
+        window.dianaApp.render();
+        window.dianaApp.initHomePage();
     }
 }
 
@@ -380,5 +477,9 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('🚀 DIANA App chargée');
     window.dianaApp = new DianaApp();
     initMenu();
+    initHomeButton();
+
+    // Exporter les fonctions globales
+    window.resetApplication = resetApplication;
 });
 

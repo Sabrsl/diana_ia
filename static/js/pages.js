@@ -34,6 +34,9 @@ const Pages = {
                             <button type="button" class="btn btn-primary" id="analyzeBtn" style="flex: 2;" disabled>
                                 🔬 ANALYSER
                             </button>
+                            <button type="button" class="btn btn-secondary" id="resetBtn" style="flex: 1;">
+                                🔄 Réinitialiser
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -142,6 +145,24 @@ const Pages = {
                         `
         }).render()}
                     
+                            ${new Components.Card({
+            title: 'Gestion du compte',
+            icon: '🔐',
+            content: `
+                            <div class="setting-item">
+                                <button class="btn btn-secondary btn-block" onclick="showNotification('🚧 Fonctionnalité bientôt disponible', 'info')">
+                                    🔑 Changer le mot de passe
+                                </button>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <button class="btn btn-danger btn-block" onclick="confirmLogout()">
+                                    🚪 Se déconnecter
+                                </button>
+                            </div>
+                        `
+        }).render()}
+                    
                     ${!user.is_premium ? new Components.Card({
             title: 'Passez à Premium',
             icon: '✨',
@@ -164,24 +185,31 @@ const Pages = {
         `;
     },
 
-    // Page de paramètres
+    // Page d'apparence
     settings: () => `
         <div class="page-settings">
-            <h1 class="page-title">⚙️ Paramètres</h1>
+            <h1 class="page-title">🎨 Apparence</h1>
             
             <div class="settings-grid">
                 ${new Components.Card({
-        title: 'Apparence',
+        title: 'Thème de l\'interface',
         icon: '🎨',
         content: `
                         <div class="setting-item">
                             <div class="setting-info">
-                                <h4>Thème de l'interface</h4>
-                                <p>Choisissez entre le mode sombre et clair</p>
+                                <h4>Mode d'affichage</h4>
+                                <p>Choisissez entre le mode sombre et clair pour une meilleure expérience</p>
                             </div>
                             <button class="btn btn-toggle" onclick="AppState.toggleTheme()">
-                                ${AppState.theme === 'dark' ? '🌙 Sombre' : '☀️ Clair'}
+                                ${AppState.theme === 'dark' ? '🌙 Mode sombre' : '☀️ Mode clair'}
                             </button>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Thème actuel</h4>
+                                <p>${AppState.theme === 'dark' ? 'Interface sombre activée' : 'Interface claire activée'}</p>
+                            </div>
                         </div>
                     `
     }).render()}
@@ -210,24 +238,6 @@ const Pages = {
                                 <input type="checkbox" id="emailToggle" checked>
                                 <span class="slider"></span>
                             </label>
-                        </div>
-                    `
-    }).render()}
-                
-                ${new Components.Card({
-        title: 'Compte',
-        icon: '👤',
-        content: `
-                        <div class="setting-item">
-                            <button class="btn btn-secondary btn-block" onclick="showNotification('🚧 Fonctionnalité bientôt disponible', 'info')">
-                                🔑 Changer le mot de passe
-                            </button>
-                        </div>
-                        
-                        <div class="setting-item">
-                            <button class="btn btn-danger btn-block" onclick="confirmLogout()">
-                                🚪 Se déconnecter
-                            </button>
                         </div>
                     `
     }).render()}

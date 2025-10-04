@@ -92,6 +92,18 @@ def main():
         if hasattr(Qt, 'AA_UseHighDpiPixmaps'):
             QApplication.setAttribute(Qt.ApplicationAttribute.AA_UseHighDpiPixmaps, True)
         
+        # Initialiser le filtre d'images
+        try:
+            from src.image_filter import get_image_filter
+            filter_engine = get_image_filter()
+            filter_loaded = filter_engine.load_model()
+            if filter_loaded:
+                logger.info("✅ Filtre d'images initialisé")
+            else:
+                logger.warning("⚠️ Filtre d'images non disponible")
+        except Exception as e:
+            logger.warning(f"Erreur initialisation filtre: {e}")
+        
         # Créer et afficher la fenêtre principale
         window = ModernMainWindow()
         window.show()

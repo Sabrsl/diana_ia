@@ -77,25 +77,39 @@ body {
 /* ========== HEADER ========== */
 .header {
     background: var(--accent-gradient);
-    padding: 60px 40px;
+    padding: 30px 40px;
     border-radius: var(--radius-2xl);
     margin-bottom: var(--spacing-2xl);
     text-align: center;
     box-shadow: var(--shadow-xl);
     position: relative;
     animation: fadeIn 0.8s ease-out;
+    transition: all 0.3s ease;
+}
+
+.header-compact {
+    padding: 20px 40px;
+}
+
+.header-compact h1 {
+    font-size: 2.2em;
+    margin-bottom: var(--spacing-xs);
+}
+
+.header-compact p {
+    font-size: 1em;
 }
 
 .header h1 {
-    font-size: 4em;
+    font-size: 3em;
     font-weight: 900;
     color: white;
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
     letter-spacing: -2px;
 }
 
 .header p {
-    font-size: 1.3em;
+    font-size: 1.1em;
     color: rgba(255, 255, 255, 0.9);
 }
 

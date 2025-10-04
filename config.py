@@ -50,6 +50,7 @@ UPDATE_CHECK_INTERVAL = 3600  # Vérifier toutes les heures
 # Configuration du modèle
 MODEL_ENCRYPTED_PATH = MODELS_DIR / "breast_cancer_model.onnx.enc"
 MODEL_DECRYPTED_PATH = MODELS_DIR / "breast_cancer_model.onnx"
+FILTER_MODEL_PATH = Path("models/filter/breast_cancer_filter.onnx")
 ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY", "").encode()
 
 # Configuration des quotas

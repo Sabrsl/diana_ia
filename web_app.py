@@ -67,6 +67,18 @@ quota_manager = get_quota_manager()
 auth_manager = get_auth_manager()
 inference_engine = get_inference_engine()
 
+# Initialiser le filtre d'images
+try:
+    from src.image_filter import get_image_filter
+    filter_engine = get_image_filter()
+    filter_loaded = filter_engine.load_model()
+    if filter_loaded:
+        logger.info("✅ Filtre d'images initialisé pour l'API web")
+    else:
+        logger.warning("⚠️ Filtre d'images non disponible - toutes les images seront acceptées")
+except Exception as e:
+    logger.warning(f"Erreur initialisation filtre web: {e}")
+
 
 # ========== ROUTES PRINCIPALES ==========
 
@@ -94,22 +106,23 @@ async def app_page():
     <body class="theme-dark">
         <div class="container">
             <!-- Header -->
-            <div class="header">
+            <div class="header" id="mainHeader">
                 <div class="header-buttons">
-                    <button class="btn-header" id="menuBtn">☰ Menu</button>
+                    <button class="btn-header" id="homeBtn">🏠 Accueil</button>
+                    <button class="btn-header" id="menuBtn">⚙️ Paramètres</button>
                     <button class="btn-header" id="loginBtn">🔐 Connexion</button>
-                    <button class="btn-header btn-header-primary" id="signupBtn">✨ S'inscrire</button>
                 </div>
                 <h1>🏥 DIANA</h1>
                 <p>Diagnostic Intelligent Automatisé pour les Nouvelles Analyses</p>
             </div>
             
-            <!-- Menu principal -->
+            <!-- Menu paramètres -->
             <div id="mainMenu" class="main-menu">
-                <a href="#" onclick="AppState.navigateTo('home'); return false;">🏠 Accueil</a>
-                <a href="#" onclick="AppState.navigateTo('profile'); return false;">👤 Profil</a>
-                <a href="#" onclick="AppState.navigateTo('settings'); return false;">⚙️ Paramètres</a>
-                <a href="#" onclick="AppState.navigateTo('help'); return false;">❓ Aide</a>
+                <a href="#" onclick="AppState.navigateTo('profile'); return false;">👤 Mon Profil</a>
+                <a href="#" onclick="AppState.navigateTo('settings'); return false;">🎨 Apparence</a>
+                <a href="#" onclick="AppState.navigateTo('help'); return false;">❓ Aide & Support</a>
+                <a href="#" onclick="AppState.navigateTo('signup'); return false;" id="signupLink">✨ S'inscrire</a>
+                <a href="#" onclick="confirmLogout(); return false;" id="logoutLink" style="display: none;">🚪 Se déconnecter</a>
             </div>
             
             <!-- Contenu principal (pages dynamiques) -->
@@ -139,9 +152,9 @@ async def app_page():
         </div>
         
         <!-- Scripts modulaires -->
-        <script src="/static/js/components.js"></script>
-        <script src="/static/js/pages.js"></script>
-        <script src="/static/js/app.js"></script>
+        <script src="/static/js/components.js?v=2"></script>
+        <script src="/static/js/pages.js?v=2"></script>
+        <script src="/static/js/app.js?v=2"></script>
     </body>
     </html>
     """)
@@ -205,6 +218,14 @@ async def predict(file: UploadFile = File(...)):
         if not result:
             raise HTTPException(status_code=500, detail="Erreur lors de la prédiction")
         
+        # Vérifier si l'image a été rejetée par le filtre
+        if result.get("error") and result.get("message"):
+            logger.warning(f"Image rejetée: {result['message']}")
+            raise HTTPException(
+                status_code=400, 
+                detail=result["message"]
+            )
+        
         logger.info(f"Prédiction réussie: {result['prediction']}")
         return JSONResponse(content=result)
     
@@ -234,6 +255,22 @@ async def get_stats():
 async def health_check():
     """Health check"""
     return {"status": "ok", "version": config.APP_VERSION}
+
+
+@app.get("/api/filter/status")
+async def get_filter_status():
+    """Statut du filtre d'images"""
+    from src.image_filter import get_image_filter
+    
+    filter_engine = get_image_filter()
+    filter_info = filter_engine.get_model_info()
+    
+    return JSONResponse(content={
+        "filter_loaded": filter_info["loaded"],
+        "model_exists": filter_info["model_exists"],
+        "model_path": filter_info["model_path"],
+        "message": "Filtre actif" if filter_info["loaded"] else "Filtre non disponible - toutes les images seront acceptées"
+    })
 
 
 @app.post("/api/auth/login")

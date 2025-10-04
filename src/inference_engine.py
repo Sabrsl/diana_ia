@@ -16,6 +16,7 @@ import config
 from src.encryption_manager import get_model_decryptor
 from src.quota_manager import get_quota_manager
 from src.auth_manager import get_auth_manager
+from src.image_filter import get_image_filter
 
 logger = logging.getLogger(__name__)
 
@@ -161,6 +162,20 @@ class InferenceEngine:
         start_time = time.time()
         
         try:
+            # FILTRAGE D'IMAGE - Vérifier si l'image est relative au cancer du sein
+            image_filter = get_image_filter()
+            filter_result = image_filter.filter_image(image_path)
+            
+            if not filter_result["accepted"]:
+                logger.warning(f"Image rejetée par le filtre: {filter_result['reason']}")
+                return {
+                    "error": True,
+                    "message": f"Image rejetée: {filter_result['reason']}",
+                    "filter_result": filter_result,
+                    "prediction": None
+                }
+            
+            logger.info(f"Image acceptée par le filtre: {filter_result.get('category_name', 'Filtrage désactivé')} ({filter_result['confidence']:.2f}%)")
             # Vérifier que le modèle chiffré existe
             model_decryptor = get_model_decryptor()
             if not model_decryptor.encrypted_model_path.exists():
