@@ -101,15 +101,15 @@ body {
 }
 
 .header h1 {
-    font-size: 3em;
+    font-size: 2.2em;
     font-weight: 900;
     color: white;
     margin-bottom: var(--spacing-sm);
-    letter-spacing: -2px;
+    letter-spacing: -1px;
 }
 
 .header p {
-    font-size: 1.1em;
+    font-size: 0.95em;
     color: rgba(255, 255, 255, 0.9);
 }
 
@@ -126,14 +126,14 @@ body {
     background: var(--accent-gradient);
     color: white;
     border: none;
-    padding: var(--spacing-md) var(--spacing-xl);
-    border-radius: var(--radius-lg);
-    font-size: 1.1em;
-    font-weight: 700;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: var(--radius-md);
+    font-size: 0.9em;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     box-shadow: var(--shadow-md);
 }
 
@@ -167,9 +167,9 @@ body {
     background: rgba(255, 255, 255, 0.2);
     color: white;
     border: 2px solid rgba(255, 255, 255, 0.4);
-    padding: var(--spacing-sm) var(--spacing-lg);
+    padding: var(--spacing-xs) var(--spacing-md);
     border-radius: var(--radius-md);
-    font-size: 1em;
+    font-size: 0.85em;
     backdrop-filter: blur(10px);
 }
 
@@ -213,9 +213,9 @@ body {
 
 .card-title,
 .panel-title {
-    font-size: 1.8em;
-    font-weight: 800;
-    margin-bottom: var(--spacing-lg);
+    font-size: 1.4em;
+    font-weight: 700;
+    margin-bottom: var(--spacing-md);
 }
 
 /* ========== MODAL ========== */

@@ -152,9 +152,9 @@ async def app_page():
         </div>
         
         <!-- Scripts modulaires -->
-        <script src="/static/js/components.js?v=2"></script>
-        <script src="/static/js/pages.js?v=2"></script>
-        <script src="/static/js/app.js?v=2"></script>
+        <script src="/static/js/components.js?v=4"></script>
+        <script src="/static/js/pages.js?v=4"></script>
+        <script src="/static/js/app.js?v=4"></script>
     </body>
     </html>
     """)

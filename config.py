@@ -54,7 +54,7 @@ FILTER_MODEL_PATH = Path("models/filter/breast_cancer_filter.onnx")
 ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY", "").encode()
 
 # Configuration des quotas
-FREE_TIER_LIMIT = int(os.getenv("FREE_TIER_LIMIT", "5000"))
+FREE_TIER_LIMIT = int(os.getenv("FREE_TIER_LIMIT", "500"))
 MAX_DEVICES_PER_USER = int(os.getenv("MAX_DEVICES_PER_USER", "2"))
 QUOTA_FILE = DATA_DIR / "user_quota.json"
 SESSION_FILE = DATA_DIR / "session.dat"

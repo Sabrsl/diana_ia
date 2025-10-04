@@ -309,8 +309,8 @@ class DianaApp {
             if (uploadText) {
                 uploadText.style.display = 'block';
                 uploadText.innerHTML = `
-                    <p style="font-size: 3em; margin-bottom: 16px;">📁</p>
-                    <p style="font-size: 1.3em; margin-bottom: 8px; font-weight: 600;">Cliquez ou glissez une image</p>
+                    <p style="font-size: 2.2em; margin-bottom: 12px;">📁</p>
+                    <p style="font-size: 1.1em; margin-bottom: 6px; font-weight: 600;">Cliquez ou glissez une image</p>
                     <p style="color: rgba(255,255,255,0.6);">JPG, PNG, BMP, TIFF, WEBP acceptés</p>
                     <p style="color: rgba(255,255,255,0.4); margin-top: 8px; font-size: 0.9em;">Taille maximale: 50 MB</p>
                 `;
@@ -324,7 +324,7 @@ class DianaApp {
             if (resultPanel) {
                 resultPanel.innerHTML = `
                     <div class="result-content">
-                        <p style="font-size: 1.2em; color: rgba(255,255,255,0.5);">
+                        <p style="font-size: 1em; color: rgba(255,255,255,0.5);">
                             En attente d'analyse...<br><br>
                             Sélectionnez une image et cliquez sur ANALYSER
                         </p>

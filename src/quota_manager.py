@@ -1,6 +1,6 @@
 """
 DIANA - Gestionnaire de quota local
-Gestion du système freemium avec quota de 5000 analyses gratuites
+Gestion du système freemium avec quota de 500 analyses gratuites
 """
 
 import json
